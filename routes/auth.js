@@ -1,6 +1,7 @@
 const express = require('express')
 const { body } = require('express-validator')
 const authController = require('../controllers/auth-controller')
+const { requireToken } = require('../middlewares/requireToken')
 const { validationResultExpress } = require('../middlewares/validationResultExpress')
 const router = express.Router()
 
@@ -24,7 +25,6 @@ router.post('/register',
   validationResultExpress,
   authController.register
 )
-
 router.post('/login',
   [
     body('email', 'Email is not correct')
@@ -38,5 +38,9 @@ router.post('/login',
   validationResultExpress,
   authController.login
 )
+
+router.get('/protected', requireToken, authController.infoUser)
+router.get('/refresh', authController.refreshToken)
+router.get('/logout', authController.logout)
 
 module.exports = router
