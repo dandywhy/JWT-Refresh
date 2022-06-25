@@ -1,6 +1,6 @@
 const User = require('../models/User.js')
 const jwt = require('jsonwebtoken')
-const { generateToken, generateRefreshToken } = require('../utils/tokenManager.js')
+const { generateToken, generateRefreshToken, tokenVerificationErrors } = require('../utils/tokenManager.js')
 
 const authController = {
   register: async (req, res) => {
@@ -51,32 +51,22 @@ const authController = {
       const user = await User.findById(req.uid).lean()
       return res.json({ email: user.email, uid: user.id })
     } catch (err) {
-      return res.status(500).json({ error: 'Server error' })
+      return res
+        .status(500)
+        .json({ error: 'Server error' })
     }
   },
   refreshToken: (req, res) => {
     try {
-      const refreshTokenCookie = req.cookies.refreshToken
-      if (!refreshTokenCookie) throw new Error('No existed token')
-
-      const { uid } = jwt.verify(refreshTokenCookie, process.env.JWT_REFRESH)
-      const { token, expiresIn } = generateToken(uid)
+      const { token, expiresIn } = generateToken(req.uid)
 
       return res.json({ token, expiresIn })
     } catch (err) {
       console.log(err.message)
-      const TokenVerificationErrors = {
-        'invalid signature': 'JWT signature invalid',
-        'jwt expired': 'JWT expired',
-        'invalid token': 'Token invalid',
-        'No Bearer': 'Incorrect form Bearer',
-        'jwt malformed': 'JWT malformed',
-        'jwt must be provided': 'JWT not provide'
-      }
 
       return res
-        .status(401)
-        .json({ error: TokenVerificationErrors[error.message] })
+        .status(500)
+        .json({ error: 'Server error' })
     }
   }
 }

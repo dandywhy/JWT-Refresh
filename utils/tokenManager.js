@@ -23,5 +23,13 @@ module.exports = {
     } catch (err) {
       console.log(err)
     }
+  },
+  tokenVerificationErrors: {
+    'invalid signature': 'JWT signature invalid',
+    'jwt expired': 'JWT expired',
+    'invalid token': 'Token invalid',
+    'No Bearer': 'Incorrect form Bearer',
+    'jwt malformed': 'JWT malformed',
+    'jwt must be provided': 'JWT not provide',
   }
 }
