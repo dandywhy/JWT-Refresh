@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+import mongoose from 'mongoose'
+const { Schema, model } = mongoose
 
 const linkSchema = new Schema({
   longLink: {
@@ -20,6 +20,4 @@ const linkSchema = new Schema({
   }
 })
 
-
-
-module.exports = mongoose.model('Link', linkSchema)
+export const Link = mongoose.model('Link', linkSchema)

@@ -1,15 +1,15 @@
-const express = require('express')
-const authController = require('../controllers/auth-controller')
-const { requireToken } = require('../middlewares/requireToken')
-const { requireRefreshToken } = require('../middlewares/requireRefreshToken')
-const { validationResultExpress, bodyRegisterValidator, bodyLoginValidator } = require('../middlewares/validatorManager.js')
-const router = express.Router()
+import { Router } from 'express'
+import { register, login, infoUser, refreshToken, logout } from '../controllers/auth-controller.js'
+import { requireToken } from '../middlewares/requireToken.js'
+import { requireRefreshToken } from '../middlewares/requireRefreshToken.js'
+import { bodyRegisterValidator, bodyLoginValidator } from '../middlewares/validatorManager.js'
+const router = Router()
 
-router.post('/register', bodyRegisterValidator, validationResultExpress, authController.register)
-router.post('/login', bodyLoginValidator, validationResultExpress, authController.login)
+router.post('/register', bodyRegisterValidator, register)
+router.post('/login', bodyLoginValidator, login)
 
-router.get('/protected', requireToken, authController.infoUser)
-router.get('/refresh', requireRefreshToken, authController.refreshToken)
-router.get('/logout', authController.logout)
+router.get('/protected', requireToken, infoUser)
+router.get('/refresh', requireRefreshToken, refreshToken)
+router.get('/logout', logout)
 
-module.exports = router
+export default router 

@@ -1,24 +1,23 @@
-const jwt = require('jsonwebtoken')
-const { tokenVerificationErrors } =  require('../utils/tokenManager')
+import jwt from 'jsonwebtoken'
+import { tokenVerificationErrors } from '../utils/tokenManager.js'
 
-module.exports = {
-  requireToken: (req, res, next) => {
-    try {
-      let token = req.headers?.authorization
+export const requireToken = (req, res, next) => {
+  try {
+    let token = req.headers?.authorization
 
-      if (!token) {
-        throw new Error('No existed token')
-      }
-      token = token.split(' ')[1]
-      const { uid } = jwt.verify(token, process.env.JWT_SECRET)
-      req.uid = uid
-      next()
-    } catch (error) {
-      console.log(error.message)
+    if (!token)
+      throw new Error('No Bearer')
+      
+    token = token.split(' ')[1]
+    const { uid } = jwt.verify(token, process.env.JWT_SECRET)
 
-      return res
-        .status(401)
-        .json({ error: tokenVerificationErrors[error.message] })
-    }
+    req.uid = uid
+    next()
+  } catch (error) {
+    console.log(error.message)
+
+    return res
+      .status(401)
+      .json({ error: tokenVerificationErrors[error.message] })
   }
 }
