@@ -52,13 +52,12 @@ export const bodyLinkValidator = [
   body('longLink', 'Incorrect form to link')
     .trim()
     .notEmpty()
-    .custom(async (value, { req }) => {
+    .custom(async (value) => {
       try {
         if (!value.startsWith('https://')) {
           value = 'https://' + value
         }
         await axios.get(value)
-        
         return value
       } catch (err) {
         console.log(err)

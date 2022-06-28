@@ -1,8 +1,8 @@
-import express from 'express'
-import { getLinks, getLink, createLink, removeLink } from '../controllers/link-controller.js'
+import { Router } from 'express'
+import { getLinks, getLink, createLink, removeLink, updateLink } from '../controllers/link-controller.js'
 import { requireToken } from '../middlewares/requireToken.js'
 import { bodyLinkValidator, paramsLinkValidator } from '../middlewares/validatorManager.js'
-const router  = express.Router()
+const router  = Router()
 
 // GET        /api/v1/links        all links
 // GET        /api/v1/links/:id    single link
@@ -11,8 +11,9 @@ const router  = express.Router()
 // DELETE     /api/v1/links/:id    update link
 
 router.get('/', requireToken, getLinks)
-router.get('/:id', requireToken, getLink)
+router.get('/:nanoLink', getLink)
 router.post('/', requireToken, bodyLinkValidator, createLink)
 router.delete('/:id', requireToken, paramsLinkValidator, removeLink)
- 
+router.patch('/:id', requireToken, paramsLinkValidator, bodyLinkValidator, updateLink)
+
 export default router
