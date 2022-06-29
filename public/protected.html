@@ -16,7 +16,7 @@
   <script>
     const logout = document.getElementById('logout')
     logout.addEventListener('click', async () => {
-      const res = await fetch('/api/v1/auth/logout', {
+      const res = await fetch('http://localhost:5000/api/v1/auth/logout', {
         method: 'GET'
       })
       console.log(res)
@@ -25,18 +25,18 @@
 
     document.addEventListener('DOMContentLoaded', async e => {
       try {
-        const resToken = await fetch('/api/v1/auth/refresh', {
+        const resToken = await fetch('http://localhost:5000/api/v1/auth/refresh', {
           method: 'GET',
           credentials: 'include'
         })
 
         const { token } = await resToken.json()
 
-        const res = await fetch('/api/v1/auth/protected', {
+        const res = await fetch('http://localhost:5000/api/v1/auth/protected', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': 'Bearer ' + token
           },
           credentials: 'include'
         })

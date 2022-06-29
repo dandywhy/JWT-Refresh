@@ -18,7 +18,8 @@ app.use(cors({
       return callback(null, origin)
     }
     return callback('Error cors origin: ' + origin + ' No authorization')
-  }
+  },
+  credentials: true
 }))
 
 app.use(express.json())
